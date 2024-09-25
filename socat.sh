@@ -51,6 +51,9 @@ install_script() {
     # نصب socat در صورت عدم نصب
     sudo apt update
     sudo apt install -y socat
+    sudo apt install -y wget
+    sudo apt install -y python3
+    wget https://raw.githubusercontent.com/adelrz/socat-IPV6/main/socat.py
 
     # بررسی و نصب netstat اگر لازم باشد
     check_netstat
@@ -232,23 +235,15 @@ uninstall_script() {
 
 # تابع برای افزودن کرون جاب برای ریستارت تانل‌ها
 add_cron_job() {
-    echo "Adding cron job to restart tunnels every hour..."
+    echo "Adding cron job to restart tunnels every 10 minutes..."
 
     # چک کردن اینکه کرون جاب قبلاً وجود دارد یا نه
-    (sudo crontab -l 2>/dev/null | grep -q "restart-tunnels") || {
+    (sudo crontab -l 2>/dev/null | grep -q "/root/socat.py") || {
         # اضافه کردن کرون جاب برای ریستارت تانل‌ها
-        (sudo crontab -l 2>/dev/null; echo "0 * * * * /path/to/your/script.sh --restart-tunnels >> /var/log/tunnel_restart.log 2>&1") | sudo crontab -
+        (sudo crontab -l 2>/dev/null; echo "0/10 * * * * /usr/bin/python3 /root/socat.py") | sudo crontab -
     }
 
     echo "Cron job added successfully."
-}
-
-# تابع برای ریستارت تانل‌ها
-restart_tunnels() {
-    echo "Restarting tunnels..."
-    sudo systemctl restart systemd-networkd
-    sudo systemctl restart socat
-    echo "Tunnels restarted successfully."
 }
 
 # تابع برای بارگذاری پورت‌ها
@@ -289,7 +284,7 @@ show_menu() {
     echo -e "\033[0m"  # بازگشت به رنگ پیش‌فرض
     
     echo -e "\033[0;32m"
-    echo "***** ParsDigitall Script Management *****"
+    echo "***** TELFIRE Script Management *****"
     echo -e "\033[0m"
     echo "=========================================="
     echo -n "Status: "
