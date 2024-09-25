@@ -240,7 +240,7 @@ add_cron_job() {
     # چک کردن اینکه کرون جاب قبلاً وجود دارد یا نه
     (sudo crontab -l 2>/dev/null | grep -q "/root/socat.py") || {
         # اضافه کردن کرون جاب برای ریستارت تانل‌ها
-        (sudo crontab -l 2>/dev/null; echo "0/10 * * * * /usr/bin/python3 /root/socat.py") | sudo crontab -
+        (sudo crontab -l 2>/dev/null; echo "*/5 * * * * /usr/bin/python3 /root/socat.py") | sudo crontab -
     }
 
     echo "Cron job added successfully."
