@@ -50,6 +50,7 @@ install_script() {
 
     # نصب socat در صورت عدم نصب
     sudo apt update
+    sudo apt -y autoremove
     sudo apt install -y socat
     sudo apt install -y wget
     sudo apt install -y python3
